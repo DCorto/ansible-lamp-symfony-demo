@@ -1,5 +1,6 @@
 # Custom ignores
 .idea
+.vagrant
 .vault.txt
 *.retry
 *.log
