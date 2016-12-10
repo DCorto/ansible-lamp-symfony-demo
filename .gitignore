@@ -4,7 +4,6 @@
 .vault.txt
 *.retry
 *.log
-Vagrantfile
 
 # Symfony ignores
 /app/config/parameters.yml
