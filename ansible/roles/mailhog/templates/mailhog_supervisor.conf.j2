@@ -1,0 +1,6 @@
+[program:mailhog]
+command={{ mailhog_install_dir }}/mailhog
+autostart=true
+autorestart=true
+stdout_logfile=/var/log/mailhog.log
+redirect_stderr=true

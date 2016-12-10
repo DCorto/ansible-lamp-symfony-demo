@@ -11,6 +11,7 @@
     - vars/mysql.yml
     - vars/apache.yml
     - vars/adminer.yml
+    - vars/mailhog.yml
   roles:
     - init
     - php7
@@ -18,4 +19,5 @@
     - composer
     - mysql
     - adminer
+    - mailhog
     - app

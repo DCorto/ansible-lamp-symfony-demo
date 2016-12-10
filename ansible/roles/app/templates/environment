@@ -4,3 +4,6 @@ DATABASE_PORT={{ database_port }}
 DATABASE_NAME={{ database_name }}
 DATABASE_USER={{ database_user }}
 DATABASE_PASSWORD={{ database_password }}
+MAILER_HOST={{ smtp_host }}
+MAILER_PORT={{ smtp_port }}
+

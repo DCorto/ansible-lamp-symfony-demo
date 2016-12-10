@@ -2,7 +2,8 @@
     document_root: /vagrant/web
 
     sys_packages: [
-      "git"
+      "git",
+      "supervisor"
     ]
 
     php_packages: [
