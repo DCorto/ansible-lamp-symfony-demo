@@ -1,0 +1,15 @@
+mysql_root_db_pass: 123456
+
+mysql_databases: [
+  {
+    name: "{{ database_name }}"
+  }
+]
+
+mysql_users: [
+  {
+    name: "{{ database_user }}",
+    pass: "{{ database_password }}",
+    priv: "*.*:ALL"
+  }
+]

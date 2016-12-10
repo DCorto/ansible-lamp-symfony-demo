@@ -1,0 +1,21 @@
+---
+- hosts: all
+  sudo: true
+  vars:
+    servername: ansible.davidcorto.es
+    serverip: 192.168.100.99
+    timezone: Europe/Madrid
+  vars_files:
+    - vars/common.yml
+    - vars/app.yml
+    - vars/mysql.yml
+    - vars/apache.yml
+    - vars/adminer.yml
+  roles:
+    - init
+    - php7
+    - apache
+    - composer
+    - mysql
+    - adminer
+    - app

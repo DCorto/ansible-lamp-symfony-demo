@@ -1,0 +1,6 @@
+path: "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
+database_host: "localhost"
+database_port: "3306"
+database_name: "symfonydb"
+database_user: "user"
+database_password: "password"

@@ -1,0 +1,26 @@
+---
+- name: Add PHP Repository
+  sudo: yes
+  apt_repository: repo=ppa:ondrej/php
+
+- name: Upgrade system packages
+  sudo: yes
+  apt: upgrade=yes update_cache=yes cache_valid_time=3600
+
+- name: Install System Packages
+  sudo: yes
+  apt: pkg={{ item }} state=present update_cache=yes cache_valid_time=3600
+  with_items:
+    - curl
+    - wget
+    - python-software-properties
+    - vim
+
+- name: Install Extra Packages
+  sudo: yes
+  apt: pkg={{ item }} state=present
+  with_items: "{{ sys_packages }}"
+
+- name: Configure the timezone
+  sudo: yes
+  template: src=timezone.tpl dest=/etc/timezone

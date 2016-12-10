@@ -1,0 +1,38 @@
+---
+- name: MySQL, Install
+  apt: name={{ item }} state=installed update_cache=yes
+  with_items:
+      - mysql-server
+      - python-selinux
+      - python-mysqldb
+
+- name: MySQL, Update mysql root password for all root accounts
+  mysql_user: name=root host={{ item }} password={{ mysql_root_db_pass }}
+  with_items:
+   - "{{ ansible_hostname }}"
+   - 127.0.0.1
+   - ::1
+   - localhost
+
+- name: copy .my.cnf file with root password credentials
+  template: src=client.cnf.j2 dest=~/.my.cnf mode=0600
+
+- name: MySQL, Ensure anonymous users are not in the database
+  mysql_user: name='' host={{ item }} state=absent
+  with_items:
+   - localhost
+   - "{{ ansible_hostname }}"
+
+- name: MySQL, Remove the test database
+  mysql_db: name=test state=absent
+
+- name: MySQL, Create the database's
+  mysql_db: name={{ item.name }} state=present
+  with_items: "{{ mysql_databases }}"
+  when: mysql_databases|lower() != 'none'
+
+- name: MySQL, Create the database users
+  mysql_user: name={{ item.name }}  password={{ item.pass|default("foobar") }}
+                priv={{ item.priv|default("*.*:ALL") }} state=present host={{ item.host | default("localhost") }}
+  with_items: "{{ mysql_users }}"
+  when: mysql_users|lower() != 'none'

@@ -1,0 +1,27 @@
+---
+- name: Install Apache + Modules needed
+  sudo: yes
+  apt: pkg={{ item }} state=present
+  with_items:
+    - libapache2-mod-fastcgi
+    - apache2
+
+- name: Install Apache Modules
+  apache2_module: state=present name={{ item }}
+  notify: restart apache
+  with_items:
+    - rewrite
+    - vhost_alias
+    - headers
+    - expires
+    - filter
+    - actions
+    - fastcgi
+
+- shell: apache2 -v
+  register: apache_version
+
+- name: Change default Apache site
+  sudo: yes
+  template: src=vhost.conf.tpl dest=/etc/apache2/sites-available/000-default.conf
+  notify: restart apache

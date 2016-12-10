@@ -1,0 +1,63 @@
+---
+- name: Set permissions on php - owner
+  lineinfile: "dest=/etc/php/7.0/fpm/pool.d/www.conf state=present regexp='^;?user' line='user = vagrant'"
+
+- name: Set permissions on php - group
+  lineinfile: "dest=/etc/php/7.0/fpm/pool.d/www.conf state=present regexp='^;?group' line='group = vagrant'"
+
+- name: Set permissions on socket - owner
+  lineinfile: "dest=/etc/php/7.0/fpm/pool.d/www.conf state=present regexp='^;?listen.owner' line='listen.owner = www-data'"
+
+- name: Set permissions on socket - group
+  lineinfile: "dest=/etc/php/7.0/fpm/pool.d/www.conf state=present regexp='^;?listen.group' line='listen.group = www-data'"
+
+- name: Set permissions on socket - mode
+  lineinfile: "dest=/etc/php/7.0/fpm/pool.d/www.conf state=present regexp='^;?listen.mode' line='listen.mode = 0660'"
+  notify: restart php7-fpm
+
+- name: Ensure timezone is set in fpm php.ini
+  lineinfile: dest=/etc/php/7.0/fpm/php.ini
+              regexp='date.timezone ='
+              line='date.timezone = Europe/Madrid'
+
+- name: Enabling opcache
+  lineinfile: dest=/etc/php/7.0/fpm/php.ini
+              regexp='^#?opcache.enable='
+              line='opcache.enable=1'
+
+- name: Set session.cookie_httponly to `true`
+  lineinfile: dest=/etc/php/7.0/fpm/php.ini
+              regexp='session.cookie_httponly(\s)?='
+              line='session.cookie_httponly=1'
+  notify: restart php7-fpm
+
+- name: Enable session strict mode
+  lineinfile: dest=/etc/php/7.0/fpm/php.ini
+              regexp='session.use_strict_mode(\s)?='
+              line='session.use_strict_mode = 1'
+  notify: restart php7-fpm
+
+- name: Exclude potentially harmfull php functions
+  lineinfile: dest=/etc/php/7.0/fpm/php.ini
+              regexp='disable_functions(\s)?='
+              line='disable_functions=exec,passthru,shell_exec,system,proc_open,popen'
+  notify: restart php7-fpm
+
+- name: Set post_max_size
+  lineinfile: dest=/etc/php/7.0/fpm/php.ini
+              regexp='post_max_size(\s)?='
+              line='post_max_size = 8M'
+  notify: restart php7-fpm
+
+- name: Set upload_max_filesize
+  lineinfile: dest=/etc/php/7.0/fpm/php.ini
+              regexp='upload_max_filesize(\s)?='
+              line='upload_max_filesize = 8M'
+              create=yes
+  notify: restart php7-fpm
+
+- name: Set memory_limit
+  lineinfile: dest=/etc/php/7.0/fpm/php.ini
+              regexp='memory_limit(\s)?='
+              line='memory_limit = 128M'
+  notify: restart php7-fpm

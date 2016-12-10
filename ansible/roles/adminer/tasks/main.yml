@@ -1,0 +1,47 @@
+---
+- name: create (download) directory
+  file:
+    path: "{{ adminer_download_path }}"
+    state: directory
+    owner: vagrant
+    group: vagrant
+    mode: 0755
+
+- name: download (latest)
+  get_url:
+    url: "{{ adminer_download_url }}"
+    dest: "{{ adminer_download_path }}/latest.php"
+    owner: vagrant
+    group: vagrant
+    mode: 0644
+    force: true
+
+- name: create (install) directory
+  file:
+    path: "{{ adminer_install_path }}"
+    state: directory
+    owner: vagrant
+    group: vagrant
+    mode: 0755
+
+- name: install
+  file:
+    src: "{{ adminer_download_path }}/latest.php"
+    dest: "{{ adminer_install_path }}/adminer.php"
+    state: link
+    force: true
+    owner: vagrant
+    group: vagrant
+
+- shell: apache2 -v
+  register: apache_version
+
+- name: Add Apache configuration file for Adminer (Debian & Apache 2.4).
+  template:
+    src: adminer.conf.j2
+    dest: "/etc/apache2/conf-available/adminer.conf"
+  when: ansible_os_family == 'Debian' and apache_version.stdout.find('Apache/2.4.') != -1
+
+- name: Enable Adminer Apache 2.4 configuration
+  command: a2enconf adminer
+  notify: restart apache

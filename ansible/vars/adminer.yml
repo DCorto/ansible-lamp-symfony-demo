@@ -1,0 +1,4 @@
+---
+adminer_download_path: /opt/adminer/downloads
+adminer_install_path: /opt/adminer/web
+adminer_download_url: http://www.adminer.org/latest.php

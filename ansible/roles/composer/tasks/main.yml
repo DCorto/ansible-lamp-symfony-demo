@@ -1,0 +1,8 @@
+- name: Install Composer
+  shell: curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer creates=/usr/local/bin/composer
+
+- name: Set right permissions on Composer
+  file: path=/usr/local/bin/composer mode=0755
+
+- name: Update Composer
+  shell: /usr/local/bin/composer self-update
