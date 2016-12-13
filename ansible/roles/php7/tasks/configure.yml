@@ -6,8 +6,14 @@
 - stat: path=/etc/php/7.0/cli/php.ini
   register: phpcli_ubuntu
 
+- stat: path=/etc/php/7.0/mods-available/xdebug.ini
+  register: php_xdebug
+
 - include: php-fpm-ubuntu.yml
   when: phpfpm_ubuntu.stat.exists
 
 - include: php-cli-ubuntu.yml
   when: phpcli_ubuntu.stat.exists
+
+- include: php-xdebug.yml
+  when: php_xdebug.stat.exists
